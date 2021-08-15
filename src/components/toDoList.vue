@@ -65,7 +65,6 @@ export default {
     toDoTitle: "",
     nameRules: [
       (v) => !!v || "TO Do is required",
-      (v) => v.length <= 10 || "TO Do must be less than 10 characters",
     ],
     valid: false,
   }),
