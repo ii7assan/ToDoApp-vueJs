@@ -13,48 +13,8 @@
               <h5>{{ completedTasks }} Finished</h5>
             </v-card-title>
             <v-card-text>
-              <v-form
-                ref="ToDoList"
-                @submit.prevent="createToDo()"
-                v-model="valid"
-              >
-                <v-text-field
-                  name="toDo"
-                  label="what's your to doo today?"
-                  v-model="toDoTitle"
-                  :rules="nameRules"
-                  solo
-                ></v-text-field>
-              </v-form>
-
-              <v-list v-for="(toDo, i) in toDos" :key="i">
-                <v-list-item>
-                  <template>
-                    <v-list-item-action>
-                      <v-checkbox v-model="toDo.isDone"></v-checkbox>
-                    </v-list-item-action>
-                    <!-- show to do -->
-                    <v-list-item-content>
-                      <v-list-item-title></v-list-item-title>
-                      <v-list-item-subtitle
-                        :class="toDo.isDone ? 'completed' : ''"
-                        >{{ toDo.text }}</v-list-item-subtitle
-                      >
-                    </v-list-item-content>
-
-                    <!-- Delete todo -->
-                    <v-list-item-action>
-                      <v-btn icon @click="deleteToDo(i)">
-                        <v-icon
-                          color="grey lighten-1"
-                          class="fas fa-trash"
-                        ></v-icon>
-                      </v-btn>
-                    </v-list-item-action>
-                  </template>
-                </v-list-item>
-                <v-divider></v-divider>
-              </v-list>
+              <InputTodo :toDos="toDos" />
+              <ToDoList :toDos="toDos" />
             </v-card-text>
           </v-card>
         </v-col>
@@ -64,12 +24,15 @@
 </template>
 
 <script>
+import ToDoList from "../components/listTodo.vue";
+import InputTodo from './inputTodo.vue';
 export default {
+  components: {
+    ToDoList,
+    InputTodo,
+  },
   data: () => ({
     toDos: [],
-    toDoTitle: "",
-    nameRules: [(v) => !!v || "TO Do is required"],
-    valid: false,
   }),
   computed: {
     toDosLenght() {
@@ -77,18 +40,6 @@ export default {
     },
     completedTasks() {
       return this.toDos.filter((task) => task.isDone).length;
-    },
-  },
-  methods: {
-    createToDo() {
-      if (this.valid) {
-        this.toDos.push({ isDone: false, text: this.toDoTitle });
-        this.toDoTitle = "";
-        this.$refs.ToDoList.reset();
-      }
-    },
-    deleteToDo(index) {
-      this.toDos.splice(index, 1);
     },
   },
 };
