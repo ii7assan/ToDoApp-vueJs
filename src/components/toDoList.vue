@@ -9,7 +9,8 @@
               class="d-flex justify-space-between align-center text-capitalize"
             >
               <h3>to do list</h3>
-              <h5 class="text-right">{{ toDosLenght }} Tasks</h5>
+              <h5>{{ toDosLenght }} Tasks</h5>
+              <h5>{{completedTasks}} Finished</h5>
             </v-card-title>
             <v-card-text>
               <v-form
@@ -28,14 +29,14 @@
 
               <v-list v-for="(toDo, i) in toDos" :key="i">
                 <v-list-item>
-                  <template v-slot:default="{ active }">
+                  <template>
                     <v-list-item-action>
-                      <v-checkbox :input-value="active"></v-checkbox>
+                      <v-checkbox  v-model="toDo.isDone"></v-checkbox>
                     </v-list-item-action>
                     <!-- show to do -->
                     <v-list-item-content>
                       <v-list-item-title></v-list-item-title>
-                      <v-list-item-subtitle>{{
+                      <v-list-item-subtitle :class="toDo.isDone ? 'completed' : ''" >{{
                         toDo.text
                       }}</v-list-item-subtitle>
                     </v-list-item-content>
@@ -46,6 +47,7 @@
                         <v-icon color="grey lighten-1">mdi-information</v-icon>
                       </v-btn>
                     </v-list-item-action>
+
                   </template>
                 </v-list-item>
                 <v-divider></v-divider>
@@ -72,6 +74,9 @@ export default {
     toDosLenght() {
       return this.toDos.length || 0;
     },
+    completedTasks() {
+      return this.toDos.filter(task => task.isDone).length
+    }
   },
   methods: {
     createToDo() {
@@ -89,4 +94,7 @@ export default {
 </script>
 
 <style>
+.completed {
+  text-decoration: line-through;
+}
 </style>
